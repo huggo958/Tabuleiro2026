@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101c2b"><title>Board Rush — corrida de tabuleiro</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Board Rush início"><span class="brand-mark">BR</span><span>BOARD <b>RUSH</b></span></a>
+      <div class="top-note"><span class="live-dot"></span> Partida local <span class="top-divider"></span> 4 jogadores</div>
+      <button class="reset-button" id="resetBtn" type="button"><span aria-hidden="true">↺</span> Nova partida</button>
+    </header>
+    <section class="intro"><div><p class="eyebrow">A corrida começa aqui</p><h1>Quem chega<br class="mobile-break"> primeiro?</h1><p class="intro-copy">Escolha um jogador, lance o dado e acompanhe cada casa até a chegada.</p></div><div class="race-mark" aria-hidden="true"><span>1</span><i></i><span>25</span></div></section>
+    <section class="game-layout" aria-label="Jogo Board Rush">
+      <section class="board-panel" aria-label="Tabuleiro de 25 casas">
+        <div class="board-heading"><div><span class="section-kicker">O percurso</span><h2>Tabuleiro</h2></div><span class="board-count">25 casas</span></div>
+        <div class="board-wrap"><svg class="icon-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <symbol id="icon-coin" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#d9a83e" stroke="#855e20" stroke-width="2"/><circle cx="20" cy="20" r="10.5" fill="none" stroke="#ffe08a" stroke-width="2"/><path d="M23 13h-6l-2 7h10l-2 7h-6" fill="none" stroke="#fff0ba" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></symbol>
+          <symbol id="icon-star" viewBox="0 0 40 40"><path d="m20 3 4.8 11 12 1-9.1 7.8 2.8 11.8L20 28.3l-10.5 6.3 2.8-11.8L3.2 15l12-1z" fill="#f2c75c" stroke="#a87427" stroke-width="2" stroke-linejoin="round"/><circle cx="20" cy="20" r="2" fill="#fff1bb"/></symbol>
+          <symbol id="icon-crystal" viewBox="0 0 40 40"><path d="m20 3 12 9-4 20H12L8 12z" fill="#62c6c0" stroke="#287b85" stroke-width="2" stroke-linejoin="round"/><path d="m20 3 1 29M8 12l13 20m11-20L21 32m-13-20h24" fill="none" stroke="#c1fff1" stroke-width="1.5"/></symbol>
+          <symbol id="icon-chest" viewBox="0 0 40 40"><path d="M6 16h28v17H6z" fill="#a7673c" stroke="#633c2c" stroke-width="2"/><path d="M5 16a7 7 0 0 1 7-7h16a7 7 0 0 1 7 7z" fill="#c88a4c" stroke="#633c2c" stroke-width="2"/><path d="M17 16h6v8h-6z" rx="2" fill="#f2c75c" stroke="#805722" stroke-width="1.5"/><path d="M10 21v7m20-7v7" stroke="#efbd63" stroke-width="2"/></symbol>
+          <symbol id="icon-tree" viewBox="0 0 40 40"><path d="M17 24h7v12h-7z" fill="#8f5a36"/><path d="m20 3 10 13h-5l9 10H6l9-10h-5z" fill="#3b9a68" stroke="#216347" stroke-width="2" stroke-linejoin="round"/><circle cx="17" cy="14" r="2" fill="#9bdd85"/></symbol>
+          <symbol id="icon-stone" viewBox="0 0 40 40"><path d="m5 26 5-12 8 2 7-8 9 7 2 12-8 7H12z" fill="#91a0a1" stroke="#596b70" stroke-width="2" stroke-linejoin="round"/><path d="m10 17 7 2m9-7 4 8m-15 11 6-9" stroke="#d9e1d8" stroke-width="2" stroke-linecap="round"/></symbol>
+          <symbol id="icon-leaf" viewBox="0 0 40 40"><path d="M34 5C17 5 6 12 7 25c1 9 12 12 20 5 6-5 8-14 7-25Z" fill="#79b86b" stroke="#39764c" stroke-width="2"/><path d="M8 34C14 23 20 18 30 11m-15 18-2-8m10 1 6 1" fill="none" stroke="#e1f3a4" stroke-linecap="round" stroke-width="2"/></symbol>
+          <symbol id="icon-compass" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="#d9e2dc" stroke="#667a79" stroke-width="2"/><path d="m25 14-3 9-8 3 3-9z" fill="#d85a54" stroke="#8f3e3a" stroke-width="1.5"/><circle cx="20" cy="20" r="2" fill="#f3c65b"/></symbol>
+        </svg><div class="board" id="board" role="grid" aria-label="Tabuleiro serpenteante"></div></div>
+        <div class="board-legend"><span><i class="legend-dot start-dot"></i> Largada</span><span><i class="legend-dot finish-dot"></i> Chegada</span><span class="legend-hint">Cada jogada move apenas o jogador selecionado</span></div>
+      </section>
+      <aside class="side-column">
+        <section class="control-panel">
+          <div class="panel-heading"><div><span class="section-kicker">Sua vez</span><h2>Controles</h2></div><span class="turn-chip" id="turnChip">Vez livre</span></div>
+          <div class="player-list" id="playerList" aria-label="Selecionar jogador"></div>
+          <div class="selected-player" id="selectedPlayer"></div>
+          <div class="mode-tabs" role="tablist" aria-label="Modo de movimento"><button class="mode-tab active" type="button" data-mode="die" role="tab" aria-selected="true">Dado</button><button class="mode-tab" type="button" data-mode="manual" role="tab" aria-selected="false">Manual</button></div>
+          <div class="mode-content" id="dieMode"><div class="dice-row"><div class="die" id="die" aria-label="Dado ainda não lançado"><span>?</span></div><div class="dice-copy"><strong id="diceResult">Pronto para jogar</strong><span id="diceSub">Resultado de 1 a 6</span></div><button class="roll-button" id="rollBtn" type="button">Rolar dado</button></div></div>
+          <div class="mode-content hidden" id="manualMode">
+            <p class="manual-instruction"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 11V5a2 2 0 0 1 4 0v5-2a2 2 0 0 1 4 0v2-1a2 2 0 0 1 4 0v5c0 5-3 8-8 8-3 0-5-2-7-5l-2-3a2 2 0 0 1 3-2l2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Toque em uma casa para movimentar o jogador.</span></p>
+            <div class="manual-secondary"><label for="stepsInput">Ou avance/retroceda uma quantidade</label><div class="manual-row"><input id="stepsInput" type="number" min="1" max="24" value="1"><button class="move-button forward" id="forwardBtn" type="button">Avançar</button><button class="move-button back" id="backBtn" type="button" aria-label="Retroceder">−</button></div><p class="control-hint">Toque em qualquer casa para escolher o destino exato.</p></div>
+          </div>
+          <div class="notice" id="notice" role="status" aria-live="polite">Selecione um jogador para começar.</div>
+        </section>
+        <section class="history-panel"><div class="panel-heading history-heading"><div><span class="section-kicker">A partida em tempo real</span><h2>Histórico</h2></div><span class="history-total" id="historyTotal">0 jogadas</span></div><ol class="history-list" id="historyList"><li class="empty-history"><span class="empty-icon">↗</span><span>As jogadas aparecem aqui.</span></li></ol></section>
+      </aside>
+    </section>
+    <footer><span class="footer-brand">Board Rush</span><span>Um caminho. Quatro jogadores. Uma chegada.</span><span class="creator-signature"><i aria-hidden="true">✦</i> Created by Vitor Huggo</span></footer>
+    <div class="confetti-layer" id="confetti" aria-hidden="true"></div>
+  </main>
+  <section class="victory-overlay hidden" id="victoryOverlay" role="dialog" aria-modal="true" aria-labelledby="victoryName">
+    <div class="victory-confetti" id="victoryConfetti" aria-hidden="true"></div>
+    <div class="victory-card">
+      <div class="victory-spark" aria-hidden="true">✦</div>
+      <div class="trophy-badge" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M19 9h26v15c0 11-6 18-13 18s-13-7-13-18V9Zm0 6H9v6c0 8 4 12 12 13m24-19h10v6c0 8-4 12-12 13M32 42v9m-10 5h20m-18-5h16" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 13h20v11c0 8-5 14-10 14s-10-6-10-14z" fill="currentColor" opacity=".35"/></svg></div>
+      <p class="victory-kicker" id="victoryRank">CHEGADA CONQUISTADA</p>
+      <h2 id="victoryName">VERMELHO</h2>
+      <p class="victory-message" id="victoryMessage">Uma corrida incrível. A vitória é sua!</p>
+      <button class="victory-button" id="continueBtn" type="button">Continuar partida</button>
+    </div>
+  </section>
+  <script src="game.js"></script>
+</body></html>
